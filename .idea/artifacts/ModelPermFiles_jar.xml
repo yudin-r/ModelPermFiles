@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="ModelPermFiles:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ModelPermFiles_jar</output-path>
+    <root id="archive" name="ModelPermFiles.jar">
+      <element id="module-output" name="ModelPermFiles" />
+    </root>
+  </artifact>
+</component>

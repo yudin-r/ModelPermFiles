@@ -8,16 +8,50 @@ import java.util.Map;
 
 public class FileManager {
     private static final String FILES_DIR = "files";
+    private static final String STORAGE_FILE = "Storage.txt";
     private static final Map<String, FileInfo> fileData = new HashMap<>();
 
-    public static void clearFiles() {
+    public static void createDir() {
         File directory = new File(FILES_DIR);
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
+    }
 
-        File[] files = directory.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                file.delete();
+    public static void loadStorage() {
+        File storageFile = new File(STORAGE_FILE);
+        if (!storageFile.exists()) {
+            return;
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(storageFile))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split("\\|");
+                if (parts.length == 3) {
+                    String filename = parts[0];
+                    String owner = parts[1];
+                    int permissions = Integer.parseInt(parts[2]);
+                    fileData.put(filename, new FileInfo(owner, permissions));
+                }
             }
+        } catch (IOException e) {
+            System.out.println("Ошибка при загрузке данных: " + e.getMessage());
+        }
+    }
+
+    public static void saveStorage() {
+        File storageFile = new File(STORAGE_FILE);
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(storageFile))) {
+            for (Map.Entry<String, FileInfo> entry : fileData.entrySet()) {
+                String filename = entry.getKey();
+                FileInfo fileInfo = entry.getValue();
+                writer.write(filename + "|" + fileInfo.getOwner() + "|" + fileInfo.getPerm());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Ошибка при сохранении данных: " + e.getMessage());
         }
     }
 

@@ -9,12 +9,14 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         AuthSystem authSystem = new AuthSystem();
 
-        FileManager.clearFiles();
+        FileManager.createDir();
+        FileManager.loadStorage();
 
         while (true) {
             System.out.print("Введите имя пользователя (или 'quit' для выхода): ");
             String username = scanner.nextLine();
             if (username.equalsIgnoreCase("quit")) {
+                FileManager.saveStorage();
                 System.out.println("Завершение программы.");
                 break;
             }
